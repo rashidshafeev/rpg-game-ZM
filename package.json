@@ -6,6 +6,7 @@
     "build:dev": "env NODE_ENV=development npx webpack",
     "build": "env NODE_ENV=production npx webpack",
     "lint": "npx eslint src/**/*.js",
+    "start": "webpack server",
     "dev": "webpack server",
     "prettier": "npx prettier --write .",
     "prepare": "husky install"
