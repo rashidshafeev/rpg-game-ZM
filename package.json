@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "RPG Game Zar Zakharov Marathon",
   "scripts": {
+    "build:dev": "env NODE_ENV=development npx webpack",
+    "build": "env NODE_ENV=production npx webpack",
     "lint": "npx eslint src/**/*.js",
     "dev": "webpack server",
     "prettier": "npx prettier --write .",
