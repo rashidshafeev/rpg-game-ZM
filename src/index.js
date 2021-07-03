@@ -21,10 +21,12 @@ let pY = 300;
 let pX = 300;
 let direction = 0;
 
-const starsColorPalette = ['#2274A5', '#FFBF00', '#32936F', '#22AED1', '#6D8EA0', '#FB4D3D'];
+const starsColorPalette = ['rgba(34, 116, 165, 1)', 'rgba(255, 191, 0, 1)', 'rgba(50, 147, 111, 1)', 'rgba(34, 174, 209, 1)', 'rgba(109, 142, 160, 1)', 'rgba(251, 77, 61, 1)'];
+251, 77, 61
 const starsX = [];
 const starsY = [];
 const starsColor = [];
+const starsSize = [];
 
 function keyDownHandler(e) {
   if (e.key === 'Down' || e.key === 'ArrowDown') {
@@ -87,18 +89,34 @@ function generateStars(amount) {
     starsX[i] = getRandom(600);
     starsY[i] = getRandom(600);
     starsColor[i] = starsColorPalette[getRandom(starsColorPalette.length) - 1];
+    starsSize[i] = getRandom(3);
   }
 }
 
 generateStars(20);
 
+// function drawStars() {
+//   for (let i = 0; i < starsX.length; i++) {
+//     ctx.fillStyle = starsColor[i];
+//     ctx.beginPath();
+//     ctx.arc(starsX[i], starsY[i], 1 + getRandom(2), 0, Math.PI * 2, false);
+//     ctx.fill();
+//     ctx.closePath();
+//   }
+// }
+
 function drawStars() {
   for (let i = 0; i < starsX.length; i++) {
+  
+
+    ctx.fillStyle = `${starsColor[i].substr(0, (starsColor[i].length)-2)}0.3)`
+    ctx.fillRect(starsX[i] - 3, starsY[i] - 3, 8 + starsSize[i] + getRandom(2), 8 + starsSize[i] + getRandom(2));
+
     ctx.fillStyle = starsColor[i];
-    ctx.beginPath();
-    ctx.arc(starsX[i], starsY[i], 1 + getRandom(2), 0, Math.PI * 2, false);
-    ctx.fill();
-    ctx.closePath();
+    
+    ctx.fillRect(starsX[i], starsY[i], 2 + starsSize[i] + getRandom(2), 2 + starsSize[i] + getRandom(2));
+
+    console.log(starsColor[i].substr(0, (starsColor[i].length)-2));
   }
 }
 
