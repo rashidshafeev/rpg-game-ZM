@@ -17,16 +17,9 @@ let buttonDown = false;
 let buttonRight = false;
 let buttonUp = false;
 let buttonLeft = false;
-let pY = 300;
-let pX = 300;
+let pY = (canvas.height - spriteW) / 2;
+let pX = (canvas.width - spriteH) / 2;
 let direction = 0;
-
-const starsColorPalette = ['rgba(34, 116, 165, 1)', 'rgba(255, 191, 0, 1)', 'rgba(50, 147, 111, 1)', 'rgba(34, 174, 209, 1)', 'rgba(109, 142, 160, 1)', 'rgba(251, 77, 61, 1)'];
-251, 77, 61
-const starsX = [];
-const starsY = [];
-const starsColor = [];
-const starsSize = [];
 
 function keyDownHandler(e) {
   if (e.key === 'Down' || e.key === 'ArrowDown') {
@@ -66,60 +59,6 @@ function getRandom(value) {
   return random;
 }
 
-function drawSpace() {
-  let i = 0;
-  let j = 0;
-  let a = 0;
-
-  while (i < 600) {
-    while (j < 600) {
-      // ctx.fillStyle = spaceColor[getRandom(6) - 1];
-      ctx.fillStyle = `rgb(${20},${22},${49 + a + getRandom(7)})`;
-      ctx.fillRect(j, i, 10, 10);
-      j += 10;
-    }
-    j = 0;
-    i += 10;
-    a += 1;
-  }
-}
-
-function generateStars(amount) {
-  for (let i = 0; i < amount; i++) {
-    starsX[i] = getRandom(600);
-    starsY[i] = getRandom(600);
-    starsColor[i] = starsColorPalette[getRandom(starsColorPalette.length) - 1];
-    starsSize[i] = getRandom(3);
-  }
-}
-
-generateStars(20);
-
-// function drawStars() {
-//   for (let i = 0; i < starsX.length; i++) {
-//     ctx.fillStyle = starsColor[i];
-//     ctx.beginPath();
-//     ctx.arc(starsX[i], starsY[i], 1 + getRandom(2), 0, Math.PI * 2, false);
-//     ctx.fill();
-//     ctx.closePath();
-//   }
-// }
-
-function drawStars() {
-  for (let i = 0; i < starsX.length; i++) {
-  
-
-    ctx.fillStyle = `${starsColor[i].substr(0, (starsColor[i].length)-2)}0.3)`
-    ctx.fillRect(starsX[i] - 3, starsY[i] - 3, 8 + starsSize[i] + getRandom(2), 8 + starsSize[i] + getRandom(2));
-
-    ctx.fillStyle = starsColor[i];
-    
-    ctx.fillRect(starsX[i], starsY[i], 2 + starsSize[i] + getRandom(2), 2 + starsSize[i] + getRandom(2));
-
-    console.log(starsColor[i].substr(0, (starsColor[i].length)-2));
-  }
-}
-
 // Кусок кода который я скопировал с javascript форума. Отключает скроллинг страницы по нажатию клавиш.
 document.body.onkeydown = function (e) {
   e = e || window.event;
@@ -133,25 +72,25 @@ img.addEventListener('load', () => {
     if (buttonDown) {
       pY += 10;
       cycle = (cycle + 1) % shots;
-      direction = 0;
+      direction = spriteH * 0;
     }
 
     if (buttonLeft) {
       pX -= 10;
       cycle = (cycle + 1) % shots;
-      direction = 48;
+      direction = spriteH * 1;
     }
 
     if (buttonRight) {
       pX += 10;
       cycle = (cycle + 1) % shots;
-      direction = 96;
+      direction = spriteH * 2;
     }
 
     if (buttonUp) {
       pY -= 10;
       cycle = (cycle + 1) % shots;
-      direction = 144;
+      direction = spriteH * 3;
     }
 
     if (pY + spriteH > 600) {
@@ -167,9 +106,6 @@ img.addEventListener('load', () => {
     }
 
     ctx.clearRect(0, 0, 600, 600);
-
-    drawSpace();
-    drawStars();
 
     ctx.drawImage(img, cycle * spriteW, direction, spriteW, spriteH, pX, pY, 48, 48);
   }, 200);
