@@ -24,7 +24,7 @@ class ClientGame {
   }
 
   createEngine() {
-    return new ClientEngine(document.getElementById(this.cfg.tagId));
+    return new ClientEngine(document.getElementById(this.cfg.tagId), this);
   }
 
   initEngine() {
@@ -33,6 +33,7 @@ class ClientGame {
       .then(() => {
         this.map.init();
         this.engine.on('render', (_, time) => {
+          this.engine.camera.focusAtGameObject(this.player);
           this.map.render(time);
         })
         this.engine.start();
@@ -44,36 +45,61 @@ class ClientGame {
     this.engine.input.onKey({
       ArrowLeft: (keydown) => {
         if (keydown) {
-          this.player.moveByCellCoord(-1, 0, (cell) => {
-            return cell.findObjectsByType('grass').length;
-          })
+          if (this.player.motionProgress === 1) {
+            const canMove = this.player.moveByCellCoord(-1, 0, (cell) => {
+              return cell.findObjectsByType('grass').length;
+            })
+            if (canMove) {
+              this.player.setState('left');
+              this.player.once('motion-stopped', () => this.player.setState('main'));
+            }
+          }
         }
       }
     })
       this.engine.input.onKey({
       ArrowRight: (keydown) => {
         if (keydown) {
-          this.player.moveByCellCoord(1, 0, (cell) => {
-            return cell.findObjectsByType('grass').length;
-          })
+          if (this.player.motionProgress === 1) {
+            const canMove = this.player.moveByCellCoord(1, 0, (cell) => {
+              return cell.findObjectsByType('grass').length;
+            })
+            if (canMove) {
+              this.player.setState('right');
+              this.player.once('motion-stopped', () => this.player.setState('main'));
+            }
+          }
         }
       }
     })
     this.engine.input.onKey({
       ArrowDown: (keydown) => {
         if (keydown) {
-          this.player.moveByCellCoord(0, 1, (cell) => {
-            return cell.findObjectsByType('grass').length;
-          })
+          if (this.player.motionProgress === 1) {
+            const canMove = this.player.moveByCellCoord(0, 1, (cell) => {
+              return cell.findObjectsByType('grass').length;
+            })
+            if (canMove) {
+              this.player.setState('down');
+              this.player.once('motion-stopped', () => this.player.setState('main'));
+            }
+          }
         }
       }
     })
     this.engine.input.onKey({
       ArrowUp: (keydown) => {
         if (keydown) {
-          this.player.moveByCellCoord(0, -1, (cell) => {
-            return cell.findObjectsByType('grass').length;
-          })
+          if (this.player.motionProgress === 1) {
+            const canMove = this.player.moveByCellCoord(0, -1, (cell) => {
+              return cell.findObjectsByType('grass').length;
+            })
+
+            if (canMove) {
+              this.player.setState('up');
+              this.player.once('motion-stopped', () => this.player.setState('main'));
+            }
+          }
         }
       }
     })
@@ -81,6 +107,10 @@ class ClientGame {
 
   createWorld() {
     return new ClientWorld(this, this.engine, levelCfg);
+  }
+
+  getWorld() {
+    return this.map;
   }
 
   static init(cfg) {
